@@ -52,14 +52,14 @@ COURSE_QUERY = f"select distinct sro.Department as subject\
     , sro.Credits as credit\
     , upper(RTRIM(sro.CourseName)) as [name]\
     from SROffer sro\
-    where sro.TermCalendarID in ({','.join([str(x) for x in TERM_IDS])})\
+    where sro.TermCalendarID in ({','.join([str(x) for x in TERM_IDS])}) and len(Department)=4 and len(courseID)=4\
     UNION ALL\
     select distinct srm.Department as subject\
     , srm.CourseID as number\
     , srm.Credits as credit\
     , upper(RTRIM(srm.CourseName)) as [name]\
     from SRMaster srm\
-    where activeFlag=1"
+    where activeFlag=1 and len(Department)=4 and len(courseID)=4"
 
 
 INSTRUCTOR_QUERY = "select distinct upper(RTRIM(fac.LastName)) as last_name\
@@ -72,12 +72,6 @@ CAMPUS_QUERY = "select Campus as [name]\
     from Campuses\
     where Campus <> ''\
     order by Campus"
-
-
-SUBJECT_QUERY = f"select distinct Department as [name]\
-    from SROffer\
-    where TermCalendarID in ({','.join([str(x) for x in TERM_IDS])})\
-    order by Department"
 
 
 LOCATION_QUERY = "select case when b.Abbreviation = 'NT' then 'Inter' else b.Abbreviation end as building\

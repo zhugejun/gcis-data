@@ -1,11 +1,18 @@
 select * 
 from SROffer sro
-where  CONCAT(sro.Department, sro.CourseID, sro.Section) = 'PHIL1301B01HY'
+where  CONCAT(sro.Department, sro.CourseID, sro.Section) = 'INMT1419'
     and TermCalendarID = 553
 
 ;
+
+select distinct Department, CourseID, CourseName
+from SRMaster
+where Department = 'BARB'
+-- where CONCAT(department, courseid) = 'INMT1419'
+;
 select Department, CourseID, Section, g.DisplayText as [Status]
     , c.Campus
+    , fac.EmployeeID
 from SROffer sro
 join TermCalendar tc on tc.TermCalendarID = sro.TermCalendarID
     left join campuses c on c.CampusID = sro.CampusID
@@ -16,7 +23,8 @@ join TermCalendar tc on tc.TermCalendarID = sro.TermCalendarID
     left join Faculty fac on schf.FacultyID = fac.FacultyID
     left join glossary g on g.uniqueid = sro.statusid
 where sro.TermCalendarID = 553
-    and CONCAT(sro.Department, sro.CourseID, sro.Section) = 'PHIL1301B01HY'
+    and CONCAT(sro.Department, sro.CourseID, sro.Section) = 'ABDR1307A02'
+    -- and fac.FirstName = 'wendy' and sro.Department = 'DNTA'
 
 ;
 select distinct TextTerm, Department, CourseID, CourseName
@@ -27,9 +35,7 @@ where CONCAT(department, courseid) = 'DFTG2450'
 
 ;
 
-select distinct Department, CourseID, CourseName
-from SRMaster
-where CONCAT(department, courseid) = 'HIST2321'
+
 
 ;
 select * from TermCalendar
@@ -59,9 +65,9 @@ from SRMaster srm
 where ActiveFlag = 1
 
 
-
+select * from Glossary where Category=1031
 
 
 select * from TermCalendar
-where termCalendarID = 553
+-- where termCalendarID = 553
 ORDER BY Term DESC
