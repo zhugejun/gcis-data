@@ -187,15 +187,19 @@ def generate_query_for_schedules_from_cams(query=SCHEDULE_QUERY, for_cams=False)
 
     if not for_cams:
         # insert by id
-        schedules["insert_by_id"] = 1
+        # schedules["insert_by_id"] = 'NULL'
         # update by id
-        schedules["update_by_id"] = 1
+        # schedules["update_by_id"] = 'NULL'
         # insert_date as today
         schedules["insert_date"] = datetime.datetime.now()
         # update_date as today
         schedules["update_date"] = datetime.datetime.now()
+        schedules["is_deleted"] = "false"
+        # schedules["deleted_at"] = None
+        # schedules["deleted_by"] = None
+
         # note as None
-        schedules["notes"] = None
+        # schedules["notes"] = None
 
     # ------- get ids for columns above --------#
     # no need to check because campus could be null
@@ -236,9 +240,10 @@ def generate_query_for_schedules_from_cams(query=SCHEDULE_QUERY, for_cams=False)
         "start_time",
         "stop_time",
         "insert_date",
-        "insert_by_id",
+        # "insert_by_id",
         "update_date",
-        "update_by_id",
+        # "update_by_id",
+        "is_deleted",
     ]
     col_types = [
         "num",
@@ -253,9 +258,10 @@ def generate_query_for_schedules_from_cams(query=SCHEDULE_QUERY, for_cams=False)
         "str",
         "str",
         "str",
-        "num",
+        # "num",
         "str",
-        "num",
+        # "num",
+        "str",
     ]
 
     if for_cams:
@@ -310,6 +316,12 @@ def load_schedules_for_cams(restart=True):
     return
 
 
+def set_cams_update_datetime():
+    logger.info("[INFO] setting CAMS update date and time")
+    query = "update scheduling_dates set cams_update_at=now();"
+    run_query_from_db(query)
+
+
 # list of steps to do when reseting
 def reset_database(restart=True):
     logger.info("[INFO] delete all tables with foreign keys...")
@@ -325,6 +337,7 @@ def reset_database(restart=True):
     load_courses_from_cams(restart=restart)
     load_schedules_for_db(restart=restart)
     load_schedules_for_cams(restart=restart)
+    set_cams_update_datetime()
 
 
 def update_cams_all(restart=True):
@@ -333,6 +346,7 @@ def update_cams_all(restart=True):
 
     logger.info("[INFO] load data to database from cams...")
     load_schedules_for_cams(restart=restart)
+    set_cams_update_datetime()
 
 
 def get_term_id_from_db(term):
@@ -381,3 +395,5 @@ def reset_gcis_by_term(term):
     insert_data_into_db(
         schedule_query_for_db, restart=False, tbl_name="scheduling_schedule"
     )
+
+    set_cams_update_datetime()

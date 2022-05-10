@@ -1,7 +1,7 @@
 # a list of queries will be used in data.py
 
-TERM_IDS = [553, 554, 559, 561, 560]
-#          Sp22, su22, fa22, sp23, su23
+TERM_IDS = [554, 559, 561, 560]
+#          su22, fa22, sp23, su23
 
 
 def generate_schedule_query_by_term_ids(term_ids=None):
