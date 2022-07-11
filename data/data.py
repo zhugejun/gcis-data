@@ -81,6 +81,8 @@ def load_instructors_from_cams(restart=True, tbl_name="scheduling_instructor"):
             ["SULLIVAN", "ZACHARY"],
             ["KEILAH", "MARCOM"],
             ["JAYCE", "RANDOLPH"],
+            ["CASTON", "ALEX"],
+            ["WOODEN", "BRANDY"],
         ],
         columns=["last_name", "first_name"],
     )
