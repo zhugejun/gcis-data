@@ -6,10 +6,10 @@ import logging
 from sqlalchemy import create_engine, text
 
 
-DATABASE = "decst491stvjr1"
-USER = "eljdsejcytlyyy"
-PASSWORD = "3aa6f140063d6c38b94d104d44b44d226d886ac81bb51cb31ae0dfcc4704a82d"
-HOST = "ec2-52-44-55-63.compute-1.amazonaws.com"
+DATABASE = "d54jj8fuetabms"
+USER = "drjzdensdbfnsm"
+PASSWORD = "b4ec75de61d7198840d481278b2a4c0b7c12fc41b7bf831b6aaf7d6cb79063b3"
+HOST = "ec2-3-228-52-125.compute-1.amazonaws.com"
 
 connection_string = f"postgresql+psycopg2://{USER}:{PASSWORD}@{HOST}/{DATABASE}"
 engine = create_engine(connection_string)
