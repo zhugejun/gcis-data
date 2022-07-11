@@ -69,6 +69,7 @@ def load_instructors_from_cams(restart=True, tbl_name="scheduling_instructor"):
     instructors = get_data_from_cams(INSTRUCTOR_QUERY)
 
     # added by Nancy, these are success coaches
+    # !!!!! last name, first name !!!!!!
     success_coaches = pd.DataFrame(
         [
             ["RATHFON", "BECKI"],
@@ -79,8 +80,8 @@ def load_instructors_from_cams(restart=True, tbl_name="scheduling_instructor"):
             ["DEEN", "LINDSAY"],
             ["RANGEL", "CATHLEEN"],
             ["SULLIVAN", "ZACHARY"],
-            ["KEILAH", "MARCOM"],
-            ["JAYCE", "RANDOLPH"],
+            ["MARCOM", "KEILAH"],
+            ["RANDOLPH", "JAYCE"],
             ["CASTON", "ALEX"],
             ["WOODEN", "BRANDY"],
         ],
