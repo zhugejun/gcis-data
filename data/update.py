@@ -14,7 +14,8 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-t", "--term", help="RESET gcis database by term with format like Spring2022")
+        "-t", "--term", help="RESET gcis database by term with format like Spring2022"
+    )
 
     args = parser.parse_args()
 

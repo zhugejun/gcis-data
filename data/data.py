@@ -218,8 +218,7 @@ def generate_query_for_schedules_from_cams(query=SCHEDULE_QUERY, for_cams=False)
         return None
 
     # add name when joining since some course with honor
-    schedules = schedules.merge(courses, how="left", on=[
-                                "subject", "number", "name"])
+    schedules = schedules.merge(courses, how="left", on=["subject", "number", "name"])
     num_missing = schedules["course_id"].isnull().sum()
     if num_missing:
         missing_courses = schedules.loc[
@@ -296,8 +295,7 @@ def load_schedules_for_db(restart=True):
         restart = False
 
     if query:
-        insert_data_into_db(query, restart=restart,
-                            tbl_name="scheduling_schedule")
+        insert_data_into_db(query, restart=restart, tbl_name="scheduling_schedule")
 
 
 def load_schedules_for_cams(restart=True):
@@ -354,7 +352,7 @@ def update_cams_all(restart=True):
 
 def get_term_id_from_db(term):
     """term: str; format: Spring 2022
-        return: term_id from db
+    return: term_id from db
     """
     term = term.upper()
     query = f"select id as term_id from scheduling_term where concat(Semester, ' ', Year) = '{term}'"

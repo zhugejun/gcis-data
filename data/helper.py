@@ -69,9 +69,11 @@ def get_data_from_cams(query):
     and run query given
     """
     from sqlalchemy.engine import URL
+
     connection_string = "DRIVER={SQL Server};SERVER=gc-sql-aws;DATABASE=CAMS_Enterprise;Trusted_Connection=yes;"
     connection_url = URL.create(
-        "mssql+pyodbc", query={"odbc_connect": connection_string})
+        "mssql+pyodbc", query={"odbc_connect": connection_string}
+    )
     engine = create_engine(connection_url)
 
     with engine.connect() as conn:
