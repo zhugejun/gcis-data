@@ -84,6 +84,7 @@ def load_instructors_from_cams(restart=True, tbl_name="scheduling_instructor"):
             ["RANDOLPH", "JAYCE"],
             ["CASTON", "ALEX"],
             ["WOODEN", "BRANDY"],
+            ["MARTIN", "ALIVIA"]
         ],
         columns=["last_name", "first_name"],
     )
@@ -218,7 +219,8 @@ def generate_query_for_schedules_from_cams(query=SCHEDULE_QUERY, for_cams=False)
         return None
 
     # add name when joining since some course with honor
-    schedules = schedules.merge(courses, how="left", on=["subject", "number", "name"])
+    schedules = schedules.merge(courses, how="left", on=[
+                                "subject", "number", "name"])
     num_missing = schedules["course_id"].isnull().sum()
     if num_missing:
         missing_courses = schedules.loc[
@@ -295,7 +297,8 @@ def load_schedules_for_db(restart=True):
         restart = False
 
     if query:
-        insert_data_into_db(query, restart=restart, tbl_name="scheduling_schedule")
+        insert_data_into_db(query, restart=restart,
+                            tbl_name="scheduling_schedule")
 
 
 def load_schedules_for_cams(restart=True):
@@ -398,3 +401,27 @@ def reset_gcis_by_term(term):
     )
 
     set_cams_update_datetime()
+
+
+def append_schedules_by_term(term):
+    logger.info("[INFO] insert new term schedules to database from cams...")
+    # load related data to the app
+    tids = get_data_from_cams(
+        f"select TermCalendarID from TermCalendar where TextTerm='{term}'"
+    )
+
+    # query to get schedules from cams
+    schedule_query_from_cams = generate_schedule_query_by_term_ids(
+        term_ids=list(tids.TermCalendarID.values)
+    )
+
+    # prepare the query to insert schedules to gcis
+    schedule_query_for_db = generate_query_for_schedules_from_cams(
+        query=schedule_query_from_cams
+    )
+
+    # load schedules to gcis
+    # logger.info(f"[INFO] Inserting new schedules for {term}")
+    insert_data_into_db(
+        schedule_query_for_db, restart=False, tbl_name="scheduling_schedule"
+    )
