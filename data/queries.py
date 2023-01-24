@@ -1,7 +1,7 @@
 # a list of queries will be used in data.py
 
-TERM_IDS = [554, 559, 561, 560]
-#          su22, fa22, sp23, su23
+TERM_IDS = [561, 560, 583]
+#          sp23, su23, fa23
 
 
 def generate_schedule_query_by_term_ids(term_ids=None):
@@ -42,7 +42,7 @@ TERM_QUERY = f"select year(TermStartDate) as [year]\
     , case when TextTerm like '%Spr%' then 'SPRING'\
            when TextTerm like '%Fal%' then 'FALL'\
            when TextTerm like '%Sum%' then 'SUMMER' end as semester\
-    , case when TermStartDate > GETDATE() then 'T' else 'F' end as active\
+    , case when TermEndDate > GETDATE() then 'T' else 'F' end as active\
     from TermCalendar\
     where TermCalendarID in ({','.join([str(x) for x in TERM_IDS])})"
 
@@ -65,7 +65,7 @@ COURSE_QUERY = f"select distinct sro.Department as subject\
 INSTRUCTOR_QUERY = "select distinct upper(RTRIM(fac.LastName)) as last_name\
     , upper(RTRIM(fac.FirstName)) as first_name\
     from Faculty fac\
-    where Active = 1 and HireStatusID <> 0 and employeeId <> ''"
+    where Active = 1 and HireStatusID <> 0"  # --and employeeId <> ''
 
 
 CAMPUS_QUERY = "select Campus as [name]\
