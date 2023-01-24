@@ -6,10 +6,10 @@ import logging
 from sqlalchemy import create_engine, text
 
 
-DATABASE = "d54jj8fuetabms"
-USER = "drjzdensdbfnsm"
-PASSWORD = "b4ec75de61d7198840d481278b2a4c0b7c12fc41b7bf831b6aaf7d6cb79063b3"
-HOST = "ec2-3-228-52-125.compute-1.amazonaws.com"
+DATABASE = "dc9sr4cul4immu"
+USER = "elegiedzafyxeh"
+PASSWORD = "16d004fe995ff7ca60eeed11780457fd1190913e8ea43d65a12a89f54c24abe7"
+HOST = "ec2-52-71-23-11.compute-1.amazonaws.com"
 
 connection_string = f"postgresql+psycopg2://{USER}:{PASSWORD}@{HOST}/{DATABASE}"
 engine = create_engine(connection_string)
@@ -43,9 +43,11 @@ def insert_data_into_db(query, restart=False, tbl_name=None):
     Insert data into database.
     """
     with engine.connect() as conn:
-        if restart and tbl_name:
+        if not tbl_name:
+            raise Exception(f"Table name is required.")
+        if restart:
             delete_table(tbl_name)
-            conn.execute(text(query))
+        conn.execute(text(query))
     return
 
 
@@ -69,6 +71,7 @@ def get_data_from_cams(query):
     and run query given
     """
     from sqlalchemy.engine import URL
+    print('......')
 
     connection_string = "DRIVER={SQL Server};SERVER=gc-sql-aws;DATABASE=CAMS_Enterprise;Trusted_Connection=yes;"
     connection_url = URL.create(
