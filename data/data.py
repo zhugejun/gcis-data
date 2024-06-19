@@ -72,19 +72,23 @@ def load_instructors_from_cams(restart=True, tbl_name="scheduling_instructor"):
     # !!!!! last name, first name !!!!!!
     success_coaches = pd.DataFrame(
         [
-            ["RATHFON", "BECKI"],
-            ["DIAZ", "LEWANDA"],
-            ["TOVAR", "CASSANDRA"],
-            ["REESE", "MARLINA"],
-            ["DEREK", "DEYONGE"],
-            ["DEEN", "LINDSAY"],
-            ["RANGEL", "CATHLEEN"],
-            ["SULLIVAN", "ZACHARY"],
-            ["MARCOM", "KEILAH"],
-            ["RANDOLPH", "JAYCE"],
-            ["CASTON", "ALEX"],
-            ["WOODEN", "BRANDY"],
-            ["MARTIN", "ALIVIA"]
+            # ["RATHFON", "BECKI"],
+            ["DIAZ", "LEWANDA"],      # verified 03/08/2024
+            # ["TOVAR", "CASSANDRA"],
+            # ["REESE", "MARLINA"],
+            # ["DEREK", "DEYONGE"],
+            # ["DEEN", "LINDSAY"],
+            ["RANGEL", "CATHLEEN"],    # verified 03/08/2024
+            # ["SULLIVAN", "ZACHARY"],
+            ["MARCOM", "KEILAH"],      # verified 03/08/2024
+            ["RANDOLPH", "JAYCE"],     # verified 03/08/2024
+            # ["CASTON", "ALEX"], 
+            ["WOODEN", "BRANDY"],      # verified 03/08/2024
+            ["MARTIN", "ALIVIA"],      # verified 03/08/2024
+            ["LANGFORD", "RACHEL"],    # verified 03/08/2024
+            # ["ZALEWSKI", "CHANTAL"],
+            # ["MACKENZIE", "KATHERINE"],
+            ["MONGE", "ALBERT"],       # added 03/08/2024
         ],
         columns=["last_name", "first_name"],
     )
@@ -226,7 +230,7 @@ def generate_query_for_schedules_from_cams(query=SCHEDULE_QUERY, for_cams=False)
         missing_courses = schedules.loc[
             schedules["course_id"].isnull(), ["subject", "number", "name"]
         ].drop_duplicates()
-        logger.error("Mising courses in GCIS...")
+        logger.error("Missing courses in GCIS...")
         for _, row in missing_courses.iterrows():
             logger.info(f"{row['subject']}{row['number']} - {row['name']}")
         return None
@@ -315,9 +319,10 @@ def load_schedules_for_cams(restart=True):
             logger.info("[INFO] Appending data to cams database...")
             # delete_table('scheduling_cams')
         insert_data_into_db(query, restart=restart, tbl_name="scheduling_cams")
-        print("[INFO] Done!")
+        print("*********** [INFO] Done! ***********")
         logger.info("[INFO] Success!")
-    return
+        return True
+    return False
 
 
 def set_cams_update_datetime():
@@ -349,8 +354,13 @@ def update_cams_all(restart=True):
     logger.info("[INFO] Updating CAMS schedules")
 
     logger.info("[INFO] load data to database from cams...")
-    load_schedules_for_cams(restart=restart)
-    set_cams_update_datetime()
+    done = load_schedules_for_cams(restart=restart)
+    if done:
+        set_cams_update_datetime()
+        msg = "CAMS schedules have been updated successfully."
+    else:
+        msg = "Failed to update CAMS schedules. Please check the logs."
+    print(msg)
 
 
 def get_term_id_from_db(term):
@@ -425,3 +435,19 @@ def append_schedules_by_term(term):
     insert_data_into_db(
         schedule_query_for_db, restart=False, tbl_name="scheduling_schedule"
     )
+    print(f"{term} schedules have been added successfully.")
+
+
+def delete_schedules_by_term(term):
+    logger.info(f"[INFO] Deleting old schedules for {term}")
+    # delete related gcis schedules
+    term_id = get_term_id_from_db(term)
+    delete_schedules_by_term_id(term_id)
+    print(f"{term} schedules have been deleted.")
+    print("Next steps: ")
+    print("- Update term ids in `queries.py` file")
+    print("- Run `python update.py` to update CAMS schedules in the app.")
+    print("- Change the term to inactive in admin panel.")
+
+
+

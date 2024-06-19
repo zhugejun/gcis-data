@@ -6,10 +6,10 @@ import logging
 from sqlalchemy import create_engine, text
 
 
-DATABASE = "dc9sr4cul4immu"
-USER = "elegiedzafyxeh"
-PASSWORD = "16d004fe995ff7ca60eeed11780457fd1190913e8ea43d65a12a89f54c24abe7"
-HOST = "ec2-52-71-23-11.compute-1.amazonaws.com"
+DATABASE = "d4hdbd44mip8rs"
+USER = "uad5b4pgen90bu"
+PASSWORD = "p1e5bab8291c21f7f9f0ecb76e417c9d397cd5f069d6b03285044b807649ce986"
+HOST = "c98cgvoa4cjnvf.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com"
 
 connection_string = f"postgresql+psycopg2://{USER}:{PASSWORD}@{HOST}/{DATABASE}"
 engine = create_engine(connection_string)
@@ -52,9 +52,9 @@ def insert_data_into_db(query, restart=False, tbl_name=None):
 
 
 def run_query_from_db(query):
-    """delete rows from database"""
+    """run query from database"""
     with engine.connect() as conn:
-        conn.execute(query)
+        conn.execute(text(query))
     return
 
 
@@ -71,7 +71,7 @@ def get_data_from_cams(query):
     and run query given
     """
     from sqlalchemy.engine import URL
-    print('......')
+    print('>>>>>> CAMS <<<<<<<<')
 
     connection_string = "DRIVER={SQL Server};SERVER=gc-sql-aws;DATABASE=CAMS_Enterprise;Trusted_Connection=yes;"
     connection_url = URL.create(
